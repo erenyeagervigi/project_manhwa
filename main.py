@@ -1,2 +1,0 @@
-print('manhwa')
-print('hellow')
