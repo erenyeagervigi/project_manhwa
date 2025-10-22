@@ -36,11 +36,22 @@ class Addform(FlaskForm):
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    manhwa = db.session.execute(db.select(Manhwa)).scalars().all()
+    return render_template("index.html", manhwa = manhwa)
 
-@app.route('/edit')
-def edit():
-    return 'hello'
+@app.route('/view', methods = ['POST','GET'])
+def view():
+    id = request.args.get('id')
+    selected_manwha =  db.session.execute(db.select(Manhwa). where(Manhwa.id == id)).scalars().first()
+    return render_template('view.html', manhwa = selected_manwha)
+
+@app.route('/delete', methods = ['POST','GET'])
+def delete():
+        id = request.args.get('id')
+        delete_manhwa = db.get_or_404(Manhwa, id)
+        db.session.delete(delete_manhwa)
+        db.session.commit()
+        return redirect(url_for('home'))
 
 def add_manhwa(name):
     url = "https://graphql.anilist.co"
@@ -108,8 +119,6 @@ def add():
             description=description,
             year=year,
             img_url=img_url,
-            rating=7,
-            review='review it'
         )
         db.session.add(new_manwa)
         db.session.commit()
