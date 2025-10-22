@@ -44,6 +44,10 @@ def view():
     selected_manwha =  db.session.execute(db.select(Manhwa). where(Manhwa.id == id)).scalars().first()
     return render_template('view.html', manhwa = selected_manwha)
 
+@app.route("/about")
+def about():
+    return render_template('about.html')
+
 @app.route('/delete', methods = ['POST','GET'])
 def delete():
         id = request.args.get('id')
