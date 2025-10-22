@@ -10,8 +10,15 @@ from wtforms.validators import DataRequired
 import requests
 
 app = Flask(__name__)
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///manhwa.db"
 app.secret_key = 'eren'
 Bootstrap5(app)
+
+class Base(DeclarativeBase):
+    pass
+db = SQLAlchemy(model_class=Base)
+db.init_app(app)
+
 
 class Addform(FlaskForm):
     title = StringField('Manhwa Title', validators=[DataRequired()])
@@ -71,9 +78,16 @@ def add_manhwa(name):
         print("AniList error:", e)
         return None
 
-@app.route('/add')
+@app.route('/add', methods = ['GET', 'POST'])
 def add():
-    pass
+    add_form = Addform()
+
+    if request.method == 'POST':
+        manhwa_title = request.form.get('title')
+        print(manhwa_title)
+        return render_template('index.html')
+
+    return render_template('add.html', form= add_form)
 
 if __name__ == "__main__":
     app.run(debug=True)
