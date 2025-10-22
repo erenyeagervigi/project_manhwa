@@ -10,6 +10,8 @@ from wtforms.validators import DataRequired
 import requests
 
 app = Flask(__name__)
+app.secret_key = 'eren'
+Bootstrap5(app)
 
 class Addform(FlaskForm):
     title = StringField('Manhwa Title', validators=[DataRequired()])
