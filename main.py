@@ -19,6 +19,14 @@ class Base(DeclarativeBase):
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
+class Manhwa(db.Model):
+    id:Mapped[int] = mapped_column(Integer,primary_key=True)
+    title:Mapped[str] = mapped_column(String,nullable=False, unique=True)
+    year:Mapped[int] = mapped_column(Integer,nullable=False)
+    description:Mapped[str] = mapped_column(String,nullable=False)
+    rating:Mapped[float] = mapped_column(Float,nullable=True)
+    img_url: Mapped[str] = mapped_column(String,nullable=False)
+
 with app.app_context():
     db.create_all()
 
@@ -86,9 +94,26 @@ def add():
 
     if request.method == 'POST':
         manhwa_title = request.form.get('title')
-        print(manhwa_title)
-        return render_template('index.html')
+        manhwa = add_manhwa(manhwa_title)
+        if not manhwa:
+            return "❌ Manhwa not found. Try again.", 404
 
+        title = manhwa['title'].get('english') or manhwa_title
+        description = manhwa['description']
+        year = manhwa['year']
+        img_url = manhwa['img_url']
+
+        new_manwa = Manhwa(
+            title=title,
+            description=description,
+            year=year,
+            img_url=img_url,
+            rating=7,
+            review='review it'
+        )
+        db.session.add(new_manwa)
+        db.session.commit()
+        return redirect(url_for('home'))
     return render_template('add.html', form= add_form)
 
 if __name__ == "__main__":
