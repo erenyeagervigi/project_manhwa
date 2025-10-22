@@ -19,6 +19,8 @@ class Base(DeclarativeBase):
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 
+with app.app_context():
+    db.create_all()
 
 class Addform(FlaskForm):
     title = StringField('Manhwa Title', validators=[DataRequired()])
