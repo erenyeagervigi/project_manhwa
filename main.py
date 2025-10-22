@@ -23,5 +23,55 @@ def home():
 def edit():
     return 'hello'
 
+def add_manhwa(name):
+    url = "https://graphql.anilist.co"
+
+    query = """
+    query ($search: String) {
+      Media(search: $search, type: MANGA) {
+        id
+        title {
+          english
+        }
+        description(asHtml: false)
+        startDate {
+          year
+        }
+        coverImage {
+          extraLarge
+          large
+          medium
+        }
+      }
+    }
+    """
+
+    variables = {"search": name}
+
+    try:
+        response = requests.post(url, json={"query": query, "variables": variables})
+        response.raise_for_status()  # check for HTTP errors
+        json_data = response.json()
+
+        # If Media is None → not found
+        media = json_data.get("data", {}).get("Media")
+        if not media:
+            return None
+
+        return {
+            'title': media['title'] or {"english": name},
+            'description': (media['description'] or "No description available.").split("<br>")[0],
+            'year': media['startDate']['year'] if media['startDate'] else "Unknown",
+            'img_url': media['coverImage']['extraLarge'] if media['coverImage'] else ""
+        }
+
+    except Exception as e:
+        print("AniList error:", e)
+        return None
+
+@app.route('/add')
+def add():
+    pass
+
 if __name__ == "__main__":
     app.run(debug=True)
