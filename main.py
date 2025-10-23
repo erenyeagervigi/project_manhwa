@@ -132,4 +132,4 @@ def add():
     return render_template('add.html', form= add_form)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False, host = '0.0.0.0')
