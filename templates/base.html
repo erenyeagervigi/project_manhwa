@@ -10,18 +10,24 @@
 </head>
 <body>
 <div class="container">
-  <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
-      <span class="fs-4">
-          Manhwa shelf
-      </span>
-    </a>
-    <ul class="nav nav-pills">
-      <li class="nav-item"><a href="{{url_for('home')}}" class="nav-link text-light" aria-current="page">Home</a></li>
-      <li class="nav-item"><a href="{{url_for('add')}}" class="nav-link text-light">Add</a></li>
-      <li class="nav-item"><a href="{{url_for('about')}}" class="nav-link text-light">About</a></li>
-    </ul>
+  <header class="row d-flex align-items-center py-3 mb-4 border-bottom">
+    <div class="col-12 col-md-6 text-center text-md-start mb-3 mb-md-0">
+      <a href="/" class="d-inline-flex align-items-center link-body-emphasis text-decoration-none">
+        <span class="fs-4 text-light">Manhwa shelf</span>
+      </a>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <ul class="nav justify-content-center justify-content-md-end">
+        <li class="nav-item"><a href="{{ url_for('home') }}" class="nav-link text-light">Home</a></li>
+        <li class="nav-item"><a href="{{ url_for('add') }}" class="nav-link text-light">Add</a></li>
+        <li class="nav-item"><a href="{{ url_for('about') }}" class="nav-link text-light">About</a></li>
+      </ul>
+    </div>
   </header>
+</div>
+
+
         {% block content %}
     {% endblock %}
 </div>
