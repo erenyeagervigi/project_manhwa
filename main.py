@@ -7,10 +7,14 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv('secrets.env')
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///manhwa.db"
-app.secret_key = 'eren'
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DB_URI', "sqlite:///manhwa.db")
+app.secret_key = os.getenv('secret_key')
 Bootstrap5(app)
 
 class Base(DeclarativeBase):
@@ -23,7 +27,6 @@ class Manhwa(db.Model):
     title:Mapped[str] = mapped_column(String,nullable=False, unique=True)
     year:Mapped[int] = mapped_column(Integer,nullable=False)
     description:Mapped[str] = mapped_column(String,nullable=False)
-    rating:Mapped[float] = mapped_column(Float,nullable=True)
     img_url: Mapped[str] = mapped_column(String,nullable=False)
 
 with app.app_context():
