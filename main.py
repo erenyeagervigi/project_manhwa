@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 load_dotenv('secrets.env')
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv('DB_URI', "sqlite:///manhwa.db")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DB_URI")
 app.secret_key = os.getenv('secret_key')
 Bootstrap5(app)
 
